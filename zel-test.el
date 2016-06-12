@@ -12,7 +12,8 @@
   (zel-test= t (not nil))
   (zel-test= t (zel-eval t ()))
   (zel-test= 1 (zel-scheme 1))
-  (zel-test= 'x (zel-compile 'x))
+  (zel-test= t (zel-compile t))
+  (zel-test= nil (zel-compile nil))
   t)
 
 (provide 'zel-test)
