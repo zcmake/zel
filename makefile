@@ -4,7 +4,8 @@ ZEL_HOST ?= emacs -Q --batch
 
 ZEL := ZEL_HOST="$(ZEL_HOST)" ./zel
 
-MODS := zel.el
+MODS := zel.el \
+	zel-test.el
 
 all: $(MODS:.el=.elc)
 
@@ -16,4 +17,4 @@ clean:
 	@echo "$<" | ZEL_CODE=" " $(ZEL) -f byte-compile-file
 
 test: all
-	@$(ZEL) --eval "(zel-run-tests)"
+	@$(ZEL) -l zel-test -f zel-run-tests
