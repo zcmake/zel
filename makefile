@@ -4,7 +4,9 @@ ZEL_HOST ?= emacs -Q --batch
 
 ZEL := ZEL_HOST="$(ZEL_HOST)" ./zel
 
-MODS := zel-compile.el \
+MODS := zel-runtime.el \
+	zel-macros.el \
+	zel-compile.el \
 	zel.el \
 	zel-test.el
 

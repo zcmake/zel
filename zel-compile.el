@@ -1,8 +1,12 @@
 ;;; -*- lexical-binding: t -*-
 
-(defun zel-compile (s &optional _env)
+(eval-and-compile
+  (require 'zel-macros))
+
+(defun zel-compile (s &optional env)
   (cond ((zel--literal-p s) s)
-         (t (error (format "Bad object in expression: %S" s)))))
+        ((zel--special-p s) (zel--special s env))
+        (t (error (format "Bad object in expression: %S" s)))))
 
 (defun zel--literal-p (x)
   (or (numberp x)
@@ -10,6 +14,20 @@
       (booleanp x)
       (eq x 't)
       (eq x 'nil)))
+
+(defconst zel--specials ())
+
+(defun zel--special-p (s)
+  (assoc (car-safe s) zel--specials))
+
+(defun zel--special (s env)
+  (let ((f (cdr (zel--special-p s)))
+        (args (cons env (cdr s))))
+    (apply f args)))
+
+(defmacro zel--define-special (name args &rest body)
+  (declare (indent 2))
+  `(zel--add zel--specials (cons ',name (lambda ,args ,@body))))
 
 (defun zel-begin ()
   (or lexical-binding
